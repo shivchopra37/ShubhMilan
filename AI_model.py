@@ -58,12 +58,71 @@ class ShubhMilanAI:
 
         print("\nThank you for using ShubhMilan! We hope your event goes smoothly.")
 
+    # def suggest_venues(self, location, budget):
+    #     print("\nSuggested Venues:")
+    #     filtered_venues = [venue for venue in self.venues if location in venue["address"].lower() and self.price_in_budget(venue["average_price"], budget)]
+    #     if filtered_venues:
+    #         for venue in filtered_venues:
+    #             print(f"- {venue['name']}, Price Range: {venue['average_price']}, Address: {venue['address']}, Contact: {venue['contact']}")
+    #     else:
+    #         print(f"No venues available within your budget in {location}.")
+
+    # def suggest_decorations(self, location, budget):
+    #     print("\nSuggested Decoration Vendors:")
+    #     filtered_decorations = [decor for decor in self.decorations if self.price_in_budget(decor["average_price"], budget)]
+    #     if filtered_decorations:
+    #         for decor in filtered_decorations:
+    #             print(f"- {decor['name']}, Price Range: {decor['average_price']}, Address: {decor['address']}, Contact: {decor['contact']}")
+    #     else:
+    #         print("No decoration vendors available within your budget.")
+
+    # def suggest_catering(self, location, budget):
+    #     print("\nSuggested Catering Vendors:")
+    #     filtered_catering = [caterer for caterer in self.catering if self.price_in_budget(caterer["average_price"], budget)]
+    #     if filtered_catering:
+    #         for caterer in filtered_catering:
+    #             print(f"- {caterer['name']}, Price Range: {caterer['average_price']}, Address: {caterer['address']}, Contact: {caterer['contact']}")
+    #     else:
+    #         print("No catering vendors available within your budget.")
+
+    # def suggest_printing(self, location):
+    #     print("\nSuggested Printing Vendors:")
+    #     filtered_printing = [printer for printer in self.printing if location in printer["address"].lower()]
+    #     if filtered_printing:
+    #         for printer in filtered_printing:
+    #             print(f"- {printer['name']}, Services: {printer['services']}, Address: {printer['address']}, Contact: {printer['contact']}")
+    #     else:
+    #         print(f"No printing vendors found in {location}.")
+
+
+    class ShubhMilanAI:
+     def __init__(self, venues, decorations, printing, catering):
+        self.venues = venues
+        self.decorations = decorations
+        self.printing = printing
+        self.catering = catering
+
+    def suggest_event_plan(self, event_type, location, budget, attendees):
+        print("\nBased on your inputs, here is a plan for your event:")
+        
+        # Calculate the budget for each category based on a predefined allocation
+        # Example: 40% for venue, 30% for catering, 20% for decorations, 10% for printing
+        venue_budget = budget * 0.4
+        catering_budget = budget * 0.3
+        decoration_budget = budget * 0.2
+        printing_budget = budget * 0.1
+
+        self.suggest_venues(location, venue_budget)
+        self.suggest_decorations(location, decoration_budget)
+        self.suggest_catering(location, catering_budget)
+        self.suggest_printing(location, printing_budget)
+
     def suggest_venues(self, location, budget):
         print("\nSuggested Venues:")
         filtered_venues = [venue for venue in self.venues if location in venue["address"].lower() and self.price_in_budget(venue["average_price"], budget)]
         if filtered_venues:
             for venue in filtered_venues:
-                print(f"- {venue['name']}, Price Range: {venue['average_price']}, Address: {venue['address']}, Contact: {venue['contact']}")
+                print(f"• {venue['name']}\n  - Price Range: {venue['average_price']}\n  - Address: {venue['address']}\n  - Contact: {venue['contact']}\n")
         else:
             print(f"No venues available within your budget in {location}.")
 
@@ -72,7 +131,7 @@ class ShubhMilanAI:
         filtered_decorations = [decor for decor in self.decorations if self.price_in_budget(decor["average_price"], budget)]
         if filtered_decorations:
             for decor in filtered_decorations:
-                print(f"- {decor['name']}, Price Range: {decor['average_price']}, Address: {decor['address']}, Contact: {decor['contact']}")
+                print(f"• {decor['name']}\n  - Price Range: {decor['average_price']}\n  - Address: {decor['address']}\n  - Contact: {decor['contact']}\n")
         else:
             print("No decoration vendors available within your budget.")
 
@@ -81,18 +140,28 @@ class ShubhMilanAI:
         filtered_catering = [caterer for caterer in self.catering if self.price_in_budget(caterer["average_price"], budget)]
         if filtered_catering:
             for caterer in filtered_catering:
-                print(f"- {caterer['name']}, Price Range: {caterer['average_price']}, Address: {caterer['address']}, Contact: {caterer['contact']}")
+                print(f"• {caterer['name']}\n  - Price Range: {caterer['average_price']}\n  - Address: {caterer['address']}\n  - Contact: {caterer['contact']}\n")
         else:
             print("No catering vendors available within your budget.")
 
-    def suggest_printing(self, location):
+    def suggest_printing(self, location, budget):
         print("\nSuggested Printing Vendors:")
         filtered_printing = [printer for printer in self.printing if location in printer["address"].lower()]
         if filtered_printing:
             for printer in filtered_printing:
-                print(f"- {printer['name']}, Services: {printer['services']}, Address: {printer['address']}, Contact: {printer['contact']}")
+                print(f"• {printer['name']}\n  - Services: {printer['services']}\n  - Address: {printer['address']}\n  - Contact: {printer['contact']}\n")
         else:
             print(f"No printing vendors found in {location}.")
+
+    def price_in_budget(self, price_range, budget):
+        if price_range == "N/A":
+            return False
+        if "-" in price_range:
+            low, high = map(int, price_range.split("-"))
+            return low <= budget <= high
+        else:
+            return int(price_range) <= budget
+
 
     def price_in_budget(self, price_range, budget):
         if "-" in price_range:
